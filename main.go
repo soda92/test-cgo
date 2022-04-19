@@ -1,19 +1,25 @@
 package main
 
-// #include "myheader.h"
+/*
+#cgo CFLAGS: -g -Wall
+#cgo LDFLAGS: -L. -lperson
+#include "person.h"
+*/
 import "C"
 import (
-	"math"
-	"unsafe"
+	"fmt"
 )
 
-func Abs(t int) int {
-	return int(math.Abs(float64(t)))
+type (
+	Person C.struct_APerson
+)
+
+func GetPerson(name string, long_name string) *Person {
+	return (*Person)(C.get_person(C.CString(name), C.CString(long_name)))
 }
 
 func main() {
-	cs := C.CString("Hello from stdio")
-	C.myprint(cs)
-	println(Abs(-22))
-	C.free(unsafe.Pointer(cs))
+	var f *Person = GetPerson("Tim", "Tim Hughes")
+	fmt.Printf("Helo Go world: My name is %s, %s.\n",
+		C.GoString(f.name), C.GoString(f.long_name))
 }

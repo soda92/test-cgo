@@ -1,0 +1,1 @@
+Remove-Item hello.exe,person.dll,person.o
